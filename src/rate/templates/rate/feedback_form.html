@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <form action = "{% url 'rate:feedback-create' %} " method = "post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">SEND</button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
