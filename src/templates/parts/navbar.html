@@ -21,12 +21,19 @@
                     <a class="nav-link" href="{% url 'rate:feedback-create' %}">Feedback</a>
                 </li>
                 {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="{% url 'account:my_profile' %}">
-                        My Profile
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'account:my_profile' %}">
+                            My Profile
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'account:sign-up' %}">
+                            Sign up
+                        </a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
