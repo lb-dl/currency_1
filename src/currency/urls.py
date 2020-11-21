@@ -8,6 +8,7 @@ handler404 = 'rate.views.handler404'
 handler500 = 'rate.views.handler500'
 
 urlpatterns = [
+    path('account/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('account/', include('account.urls')),

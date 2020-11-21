@@ -27,6 +27,12 @@
                             My Profile
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'account:password-change' %}">
+                            Change password
+                        </a>
+                    </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link"

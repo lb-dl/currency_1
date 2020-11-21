@@ -13,3 +13,4 @@ class User(AbstractUser):
         if not self.pk:
             self.username = str(uuid.uuid4())
         super().save(*args, **kwargs)
+

@@ -72,7 +72,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '172.18.0.2:11211',
     }
 }
 
@@ -171,3 +171,9 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'example@ex.com'
     DOMAIN = 'http://127.0.0.1:8000'
+
+
+#AUTHENTICATION_BACKENDS = (
+ #   'path_to.backends.EmailBackend',
+  #  'django.contrib.auth.backends.ModelBackend',
+   # )

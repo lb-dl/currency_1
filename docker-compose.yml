@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+
+  backend:
+    build: .
+    container_name: backend
+    tty: true
+    stdin_open: true
+    restart: always
+    depends_on:
+      - memcached
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/srv/project
+
+  memcached:
+    image: memcached:1.6.8
+    container_name: memcached
+    tty: true
+    stdin_open: true
+    restart: always
