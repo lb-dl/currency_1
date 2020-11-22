@@ -11,5 +11,5 @@ urlpatterns = [
     path('sign-up/', views.SignUpView.as_view(), name='sign-up'),
     path('activate/<uuid:username>/', views.ActivateUser.as_view(), name='activate'),
     path('password-change/', views.PasswordChangeView.as_view(), name='password-change'),
-    #path('password_change/done/', views.PasswordChangeDoneView.as_view(), name='password-change-done'),
+    # path('password_change/done/', views.PasswordChangeDoneView.as_view(), name='password-change-done'),
     ]

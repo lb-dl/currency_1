@@ -41,7 +41,6 @@ class UserRegistrationForm(forms.ModelForm):
         return instance
 
 
-
 class PasswordChangeForm(forms.ModelForm):
 
     current_password = forms.CharField(label=("Current_password"), widget=forms.PasswordInput())
@@ -50,14 +49,13 @@ class PasswordChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('current_password','new_password','confirm_new_password',)
+        fields = ('current_password', 'new_password', 'confirm_new_password',)
 
     def clean_current_password(self):
         current_password = self.cleaned_data['current_password']
         if not self.instance.check_password(current_password):
             raise forms.ValidationError('password is incorrect')
         return current_password
-
 
     def clean(self):
         cleaned_data: dict = super().clean()
@@ -66,10 +64,8 @@ class PasswordChangeForm(forms.ModelForm):
                 raise forms.ValidationError("Passwords do not match.")
         return cleaned_data
 
-
     def save(self, commit=True):
         instance: User = super().save(commit=False)
         instance.set_password(self.cleaned_data['new_password'])
-        if commit:
-            instance.save()
+        instance.save()
         return instance

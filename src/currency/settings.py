@@ -171,9 +171,3 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'example@ex.com'
     DOMAIN = 'http://127.0.0.1:8000'
-
-
-#AUTHENTICATION_BACKENDS = (
- #   'path_to.backends.EmailBackend',
-  #  'django.contrib.auth.backends.ModelBackend',
-   # )
