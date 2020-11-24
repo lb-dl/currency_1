@@ -1,0 +1,15 @@
+[run]
+branch = True
+omit = manage.py,
+       */migrations/*,
+       */tests/*,
+       src/settings*.py,
+       wsgi.py,
+       rate/apps.py,
+       account/apps.py,
+
+[report]
+precision = 4
+
+[html]
+directory = static_content/media/coverage

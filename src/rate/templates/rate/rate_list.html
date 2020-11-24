@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div>{{object_count}}</div>
+      <div>
+        <a href = "{% url 'rate:list-csv' %}">DOWNLOAD CSV</a>
+      </div>
+      <div>
+        <a href = "{% url 'rate:list-xlsx' %}">DOWNLOAD XLSX</a>
+      </div>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Counter</th>
+            <th scope="col">ID</th>
+            <th scope="col">Buy</th>
+            <th scope="col">Sale</th>
+            <th scope="col">Carrency</th>
+            <th scope="col">Source</th>
+            {% if request.user.is_superuser %}
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
+            {% endif %}
+          </tr>
+        </thead>
+      <tbody>
+        {% for rate in rate_list %}
+          <tr>
+            <th>{{ forloop.counter }}</th>
+            <th>{{ rate.id }}</th>
+            <th>{{ rate.buy }}</th>
+            <th>{{ rate.sale }}</th>
+            <th>{{ rate.get_currency_display }}</th>
+            <th>{{ rate.get_source_display }}</th>
+            {% if request.user.is_superuser %}
+            <th><a href = "{% url 'rate:update-rate' rate.id %}">Update</a></th>
+            <th><a href = "{% url 'rate:delete-rate' rate.id %}">Delete</a></th>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </div>
+  </div>
+{% endblock content %}

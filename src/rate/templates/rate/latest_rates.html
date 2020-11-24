@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+    <div class="col">
+        {% for rate in rate_latest %}
+        <p>
+          COUNTER:{{ forloop.counter }}
+          ID: {{ rate.id }}
+          BUY: {{ rate.buy }}
+          CURRENCY: {{ rate.get_currency_display }}
+          SOURCE: {{ rate.get_source_display }}
+        </p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}

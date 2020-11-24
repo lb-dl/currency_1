@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ rate.id }}"?</p>
+        <input type="submit" value="Delete">
+    </form>
+</body>
+</html>
+
+
+
+
+
