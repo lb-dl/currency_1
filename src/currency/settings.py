@@ -4,18 +4,17 @@ from celery.schedules import crontab
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = '04$cymb0@u215fzk+v@kbxl_m-z0g0$mc#b%^(kiuw51enu3#h'
+SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = True
+DEBUG = os.environ['SERVER'] == 'dev'
 
 if DEBUG is False:
-    ALLOWED_HOSTS = [
-        '127.0.0.1:8000',
-        '*',
-    ]
+    ALLOWED_HOSTS = ['*']
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['127.0.0.1']
+    ALLOWED_HOSTS = ['*']
+
+REDIS_HOST = 'redis'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,16 +63,26 @@ WSGI_APPLICATION = 'currency.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#        'LOCATION': '172.18.0.2:11211',
+#    }
+#}
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '172.18.0.2:11211',
-    }
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+    },
 }
 
 
@@ -113,43 +122,47 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_content', 'static')
+STATIC_ROOT = os.path.join('/tmp', 'static_content', 'static')
 
-# Celery
-CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_BROKER_URL = 'amqp://localhost'
+#Celery
+CELERY_BROKER_URL = 'amqp://{0}:{1}@rabbitmq:5672//'.format(
+    os.environ.get('RABBITMQ_DEFAULT_USER', 'guest'),
+    os.environ.get('RABBITMQ_DEFAULT_PASS', 'guest'),
+)
 
 CELERY_BEAT_SCHEDULE = {
     'parse': {
         'task': 'rate.tasks.parse_privatbank',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 
 CELERY_BEAT_SCHEDULE = {
     'parse': {
         'task': 'rate.tasks.parse_monobank',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 
 CELERY_BEAT_SCHEDULE = {
     'parse': {
         'task': 'rate.tasks.parse_minora',
-        'schedule': crontab(minute='*/59'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 
 CELERY_BEAT_SCHEDULE = {
     'parse': {
         'task': 'rate.tasks.parse_pumb',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 
 CELERY_BEAT_SCHEDULE = {
     'parse': {
         'task': 'rate.tasks.parse_kredobank',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/5'),
     },
 }
 

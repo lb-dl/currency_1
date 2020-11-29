@@ -11,6 +11,21 @@ COPY requirements.txt /tmp/requirements.txt
 
 RUN pip install -r /tmp/requirements.txt
 
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    SERVER=production \
+    MODE=wsgi
+
+# MODE=[wsgi,celery,celerybeat]
+
 COPY src/ src/
 
-CMD ["python", "./src/manage.py", "runserver", "0:8000"]
+COPY ./run.sh ./run.sh
+
+RUN chmod +rx ./run.sh
+
+RUN useradd -ms /bin/bash ubuntu
+RUN chown -R ubuntu:ubuntu /srv/project
+USER ubuntu
+
+CMD bash -C "./run.sh"

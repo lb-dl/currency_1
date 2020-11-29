@@ -1,4 +1,5 @@
-.env/
+.env
 __pycache__/
 .idea/
 static_content/
+.env_currency/
