@@ -8,12 +8,14 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
 
-
 from rate.models import ContactUs, Feedback, Rate
 from rate.selectors import get_latest_rates
 from rate.utils import display
 
 import xlsxwriter
+
+# from rest_framework import serializers
+# from rest_framework import generics, viewsets
 
 
 class RateListView(ListView):
@@ -130,3 +132,32 @@ class DeleteRate(DeleteView):
     template_name = 'rate/delete_rate.html'
     context_object_name = 'rate'
     success_url = reverse_lazy('index')
+
+
+# class RateSerializer(serializers.ModelSerializer):
+
+#    class Meta:
+#        model = Rate
+#        fields = ('id',
+#                  'created',
+#                  'source',
+#                  'currency',
+#                  'buy',
+#                  'sale',
+#                  'get_source_display'
+#                  )
+
+
+# class RateAPIViewSet(viewsets.ModelViewSet):
+#    queryset = Rate.objects.all().order_by('-id')
+#    serializer_class = RateSerializer
+
+
+# class RateListAPIView(generics.ListCreateAPIView):
+#    queryset = Rate.objects.all().order_by('-id')
+#    serializer_class = RateSerializer
+
+
+# class RateAPIView(generics.RetrieveUpdateDestroyAPIView):
+#    queryset = Rate.objects.all().order_by('-id')
+#    serializer_class = RateSerializer

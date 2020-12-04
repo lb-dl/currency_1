@@ -13,3 +13,16 @@ class User(AbstractUser):
         if not self.pk:
             self.username = str(uuid.uuid4())
         super().save(*args, **kwargs)
+
+
+def user_avatar_upload(instance, filename):
+    return f'{instance.user_id}/{filename}'
+
+
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file_path = models.FileField(upload_to=user_avatar_upload)
+
+    def delete(self, *args, **kwargs):
+        self.file_path.delete()
+        super().delete(*args, **kwargs)

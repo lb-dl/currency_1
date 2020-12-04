@@ -30,8 +30,6 @@ services:
     container_name: celery
     environment:
       - MODE=celery
-    <<: *x-defaults
-    <<: *x-backend-defaults
 
   celerybeat:
     build: .
@@ -86,26 +84,22 @@ services:
   postgres:
     image: postgres:12.3-alpine
     container_name: postgres
-    volumes:
-      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    networks:
-      - back
+    volumes:
+      - db_data:/var/lib/postgresql/data
     <<: *x-defaults
 
   pgadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
+    <<: *x-defaults
+    ports:
+      - "${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}"
     depends_on:
       - postgres
-    ports:
-     - "5050:80"
-    networks:
-      - back
-    <<: *x-defaults
-
-networks:
-  back:
+    links:
+      - postgres
 
 volumes:
   db_data: { }

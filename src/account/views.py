@@ -1,10 +1,10 @@
-from account.forms import PasswordChangeForm, UserRegistrationForm
-from account.models import User
+from account.forms import AvatarForm, PasswordChangeForm, UserRegistrationForm
+from account.models import Avatar, User
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, View
+from django.views.generic import CreateView, ListView, UpdateView, View
 
 
 class MyProfile(LoginRequiredMixin, UpdateView):
@@ -42,3 +42,28 @@ class PasswordChangeView(UpdateView):
 
     def get_object(self):
         return self.request.user
+
+
+class CreateUserAvatar(LoginRequiredMixin, CreateView):
+    model = Avatar
+    form_class = AvatarForm
+    success_url = reverse_lazy('index')
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs['request'] = self.request
+        return form_kwargs
+
+
+class Avatars(LoginRequiredMixin, ListView):
+    queryset = Avatar.objects.all()
+
+    def get_queryset(self):
+        return self.request.user.avatar_set.all()
+
+
+def delete_avatar(request, pk):
+    if request.method == 'POST':
+        avatar = Avatar.objects.get(pk=pk)
+        avatar.delete()
+    return redirect('index')
