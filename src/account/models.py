@@ -16,10 +16,9 @@ class User(AbstractUser):
 
     @property
     def active_avatar(self) -> str:
-        avatar = Avatar.objects.last().file_path
+        avatar = self.avatar_set.last()
         url = f'http://127.0.0.1:8000/media/{avatar}'
-        user = User.objects.last()
-        if user.active_avatar:
+        if avatar and avatar.file_path:
             return url
         else:
             return None
