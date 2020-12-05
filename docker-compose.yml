@@ -1,23 +1,107 @@
 version: "3.8"
 
+x-defaults: &x-defaults
+  tty: true
+  stdin_open: true
+  restart: always
+  env_file: .env
+
+x-backend-defaults: &x-backend-defaults
+  depends_on:
+    - memcached
+    - rabbitmq
+    - postgres
+  volumes:
+    - ./:/srv/project
+
 services:
 
   backend:
     build: .
     container_name: backend
-    tty: true
-    stdin_open: true
-    restart: always
-    depends_on:
-      - memcached
     ports:
       - "8000:8000"
-    volumes:
-      - ./:/srv/project
+      - "9000:9000"
+    <<: *x-defaults
+    <<: *x-backend-defaults
+
+  celery:
+    build: .
+    container_name: celery
+    environment:
+      - MODE=celery
+
+  celerybeat:
+    build: .
+    container_name: celerybeat
+    environment:
+      - MODE=celerybeat
+    <<: *x-defaults
+    <<: *x-backend-defaults
 
   memcached:
     image: memcached:1.6.8
     container_name: memcached
-    tty: true
-    stdin_open: true
+    <<: *x-defaults
+
+  rabbitmq:
+    image: rabbitmq:3.8-rc-management
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+    <<: *x-defaults
+
+  nginx:
+    image: nginx:latest
+    #    command: /bin/sh /etc/nginx/start_nginx.sh
+    container_name: nginx
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./proxy_params:/etc/nginx/proxy_params:ro
+    depends_on:
+      - backend
+    ports:
+      - "10080:80"
+      - "10443:443"
+    <<: *x-defaults
+
+  redis:
+    image: redis:4-alpine
     restart: always
+    volumes:
+      - "redis:/data"
+    ports:
+      - "6379:6379"
+
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9001:9000"
+
+  postgres:
+    image: postgres:12.3-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    <<: *x-defaults
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    <<: *x-defaults
+    ports:
+      - "${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}"
+    depends_on:
+      - postgres
+    links:
+      - postgres
+
+volumes:
+  db_data: { }
+  redis: { }
+  portainer_data: { }

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">AVATAR</th>
+        <th scope="col">DELETE</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for avatar in object_list %}
+        <tr>
+          <th>
+              <img src="{{avatar.file_path.url}}">
+          </th>
+          <th>
+             <form method="post" action="{% url 'account:avatar-delete' avatar.pk %}">
+               {% csrf_token %}
+               <button type="submit">Delete</button>
+             </form>
+          </th>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock content %}

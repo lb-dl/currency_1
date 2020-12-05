@@ -1,4 +1,4 @@
-from account.models import User
+from account.models import Avatar, User
 from account.tasks import send_sign_up_email
 
 from django import forms
@@ -67,5 +67,21 @@ class PasswordChangeForm(forms.ModelForm):
     def save(self, commit=True):
         instance: User = super().save(commit=False)
         instance.set_password(self.cleaned_data['new_password'])
+        instance.save()
+        return instance
+
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ('file_path',)
+
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.user = self.request.user
         instance.save()
         return instance

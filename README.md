@@ -1,1 +1,3 @@
-# currency_1
+# start project currency_1
+
+$ make build

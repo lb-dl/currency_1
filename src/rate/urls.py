@@ -2,6 +2,10 @@ from django.urls import path
 
 from rate import views
 
+# from rest_framework.routers import DefaultRouter
+
+# router = DefaultRouter()
+# router.register('rates', views.RateAPIViewSet, basename='rate')
 
 app_name = 'rate'
 
@@ -14,5 +18,7 @@ urlpatterns = [
     path('list/latest', views.LatestRates.as_view(), name='list-latest'),
     path('update-rate/<int:pk>', views.UpdateRate.as_view(), name='update-rate'),
     path('delete-rate/<int:pk>', views.DeleteRate.as_view(), name='delete-rate'),
-
+    # path('api/rates/', views.RateListAPIView.as_view(), name='api-rates'),
+    # path('api/rates/<int:pk>/', views.RateAPIView.as_view(), name='api-rate'),
     ]
+# urlpatterns.extend(router.urls)
