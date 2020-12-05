@@ -14,6 +14,16 @@ class User(AbstractUser):
             self.username = str(uuid.uuid4())
         super().save(*args, **kwargs)
 
+    @property
+    def active_avatar(self) -> str:
+        avatar = Avatar.objects.last().file_path
+        url = f'http://127.0.0.1:8000/media/{avatar}'
+        user = User.objects.last()
+        if user.active_avatar:
+            return url
+        else:
+            return None
+
 
 def user_avatar_upload(instance, filename):
     return f'{instance.user_id}/{filename}'
