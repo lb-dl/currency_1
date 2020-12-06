@@ -9,6 +9,7 @@
       <div>
         <a href = "{% url 'rate:list-xlsx' %}">DOWNLOAD XLSX</a>
       </div>
+      {% include 'parts/filters.html' %}
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -24,22 +25,24 @@
             {% endif %}
           </tr>
         </thead>
-      <tbody>
-        {% for rate in rate_list %}
-          <tr>
-            <th>{{ forloop.counter }}</th>
-            <th>{{ rate.id }}</th>
-            <th>{{ rate.buy }}</th>
-            <th>{{ rate.sale }}</th>
-            <th>{{ rate.get_currency_display }}</th>
-            <th>{{ rate.get_source_display }}</th>
-            {% if request.user.is_superuser %}
-            <th><a href = "{% url 'rate:update-rate' rate.id %}">Update</a></th>
-            <th><a href = "{% url 'rate:delete-rate' rate.id %}">Delete</a></th>
-            {% endif %}
-          </tr>
-        {% endfor %}
-      </tbody>
+        <tbody>
+          {% for rate in rate_list %}
+            <tr>
+              <th>{{ forloop.counter }}</th>
+              <th>{{ rate.id }}</th>
+              <th>{{ rate.buy }}</th>
+              <th>{{ rate.sale }}</th>
+              <th>{{ rate.get_currency_display }}</th>
+              <th>{{ rate.get_source_display }}</th>
+              {% if request.user.is_superuser %}
+                <th><a href = "{% url 'rate:update-rate' rate.id %}">Update</a></th>
+                <th><a href = "{% url 'rate:delete-rate' rate.id %}">Delete</a></th>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include 'parts/pagination.html' %}
     </div>
   </div>
 {% endblock content %}

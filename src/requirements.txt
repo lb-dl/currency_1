@@ -49,3 +49,4 @@ XlsxWriter==1.3.7
 xlwt==1.3.0
 djangorestframework
 drf-yasg
+django-filter=2.4.0
