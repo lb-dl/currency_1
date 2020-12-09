@@ -14,6 +14,9 @@ collectstatic:
 	docker cp backend:/tmp/static_content/static /tmp/static && \
 	docker cp /tmp/static nginx:/etc/nginx/static
 
+shell:
+	docker exec -it backend python src/manage.py shell_plus --print-sql
+
 start:
 	cp -n .env .env && docker-compose up -d --build
 

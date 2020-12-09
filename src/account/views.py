@@ -66,4 +66,4 @@ def delete_avatar(request, pk):
     if request.method == 'POST':
         avatar = Avatar.objects.get(pk=pk)
         avatar.delete()
-    return redirect('index')
+    return redirect('account:avatars')
