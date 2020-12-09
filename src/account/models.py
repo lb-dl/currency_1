@@ -9,6 +9,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     email = models.EmailField('email address', blank=False, null=False, unique=True)
 
+    class Meta:
+        permissions = [
+            ('full_edit', 'This permission allows user to update all available fields in User model'),
+        ]
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.username = str(uuid.uuid4())
@@ -33,7 +38,7 @@ class Avatar(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'Id: {self.id}, is_active: ' \
+        return f'Id: {self.id}, is_active: '\
                f'{self.is_active}, user: {self.user_id}'
 
     def save(self, *args, **kwargs):
